@@ -1,0 +1,247 @@
+jQuery(document).ready(function () {
+  // var columnsSlides = jQuery(".njt-reviews-carousel-column").data("column");
+  // var carouselAutoplay= jQuery(".njt-google-places-reviews-wap").data("carousel-autoplay");
+  // var carouselAutoplaySpeed = jQuery(".njt-google-places-reviews-shortcode .njt-google-places-reviews-wap").data("carousel-speed");
+  jQuery('.btn-reivew').click(function()
+    {
+      jQuery(this).data('clicked',!jQuery(this).data('clicked'));
+
+    if (jQuery(this).data('clicked'))
+        {
+          var id = jQuery(this).data("id");
+
+          jQuery(this).text(njt_ggreviews.read_less);
+    
+          jQuery("#" + id + " .review-item-long").show();
+    
+          jQuery("#" + id + " .review-item-short").hide();
+        }
+    else
+        {
+          var id = jQuery(this).data("id");
+
+          jQuery(this).text(njt_ggreviews.read_more);
+    
+          jQuery("#" + id + " .review-item-long").hide();
+    
+          jQuery("#" + id + " .review-item-short").show();
+        }
+    });
+  jQuery(".njt-google-places-reviews-wap[data-id]").each(function (index) {
+    var thisElement = this;
+
+    var columnsSlides = jQuery(thisElement)
+      .find(".njt-reviews-carousel-column")
+      .data("column");
+    var carouselAutoplay = jQuery(thisElement).data("carousel-autoplay");
+    var carouselAutoplaySpeed = jQuery(thisElement).data("carousel-speed");
+    var getDir = jQuery('html').attr('dir');
+    var setDir = false
+    if(getDir == 'rtl') {
+      setDir = true;
+    }
+    if(jQuery('.njt-reviews-carousel-wrap').length > 0) {
+      jQuery(thisElement)
+      .find(".njt-reviews-carousel-wrap")
+      .slick({
+        rtl: setDir,
+        show: 1,
+        slidesToShow: columnsSlides,
+        slidesToScroll: columnsSlides,
+        responsive: [
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+            },
+          },
+        ],
+        prevArrow: '<div class="njt-gr-slick-prev"></div>',
+        nextArrow: '<div class="njt-gr-slick-next"></div>',
+        dots: false,
+        autoplay: carouselAutoplay == true ? true : false,
+        autoplaySpeed: carouselAutoplaySpeed
+          ? Number(carouselAutoplaySpeed)
+          : 3000,
+      });
+    }
+    
+  });
+  // jQuery(".njt-reviews-carousel-wrap").slick({
+  //   show: 1,
+  //   slidesToShow: columnsSlides,
+  //   slidesToScroll: columnsSlides,
+  //   prevArrow: '<div class="njt-gr-slick-prev"></div>',
+  //   nextArrow: '<div class="njt-gr-slick-next"></div>',
+  //   dots: false,
+  //   autoplay: carouselAutoplay == true ? true : false,
+  //   autoplaySpeed: carouselAutoplaySpeed ? Number(carouselAutoplaySpeed) : 3000
+  // });
+
+  // handle show side model when click on badge
+  const BADGE =
+    ".njt-google-places-reviews.njt-google-places-reviews-wap.njt-badge";
+  const MODAL = ".njt-review-badge-modal";
+
+  let selectedBadge = undefined
+  let ratingElement = undefined
+  let avatar = undefined
+  let titleText = undefined
+  let googleActionsData = undefined
+
+  function cleanUpBadgeModalData() {
+    selectedBadge = undefined
+    ratingElement = undefined
+    avatar = undefined
+    title = undefined
+    googleActionsData = undefined
+  }
+
+  jQuery(BADGE).click(function (event) {
+    jQuery(MODAL).css("display", "flex");
+
+    selectedBadge  = jQuery(event.currentTarget)
+
+    avatar = selectedBadge.find('.njt-header-image img')
+    jQuery(`${MODAL}__header-image`).html(avatar.clone())
+
+    titleText = selectedBadge.find('.njt-header-title a').text()
+    jQuery(`${MODAL}__header-title`).html(`<span>${titleText}</span>`)
+
+    ratingElement = selectedBadge.find('.njt-rating-container')
+    jQuery(`${MODAL}__header-title`).append(ratingElement.clone())
+
+    let reviews = selectedBadge.find('.njt-header').attr('google-reviews')
+    reviews = JSON.parse(reviews)
+    jQuery(`${MODAL}__content`).empty()
+    reviews.forEach((review) => {
+      jQuery(`${MODAL}__content`).append(createReview(review))
+    })
+
+    googleActionsData = selectedBadge.find('.njt-header').data('google-actions');
+    if (googleActionsData) {
+      jQuery(`${MODAL}__content`).append('<div class="njt-google-action-container"></div>');
+      if (googleActionsData.googlePlusPage && googleActionsData.btnSeeAllReviewsLabel) {
+        jQuery(`${MODAL}__content .njt-google-action-container`).append(
+          `<a target="_blank" href="${googleActionsData.googlePlusPage}" class="njt-btn-see-all-reviews">${googleActionsData.btnSeeAllReviewsLabel}</a><br/>`
+        );
+      }
+      if (googleActionsData.locationId && googleActionsData.btnWriteAReviewLabel) {
+        jQuery(`${MODAL}__content .njt-google-action-container`).append(
+          `<a target="_blank" href="https://search.google.com/local/writereview?placeid=${googleActionsData.locationId}" class="njt-btn-write-review">${googleActionsData.btnWriteAReviewLabel}</a><br/>`
+        );
+      }
+    }
+
+    cleanUpBadgeModalData()
+  });
+ 
+  function createReview(review) {
+    let r = ""
+    r += '<div class="njt-review-badge-modal__review">\n'
+    r += ' <div class="njt-review-badge-modal__review-avatar">\n'
+    r += `   <img src="${review.avatar}" alt="${review.authorName}" />\n`
+    r += ' </div>\n'
+    r += ' <div class="njt-review-badge-modal__review-info">\n'
+    r += '   <div class="njt-review-badge-modal__review-name njt-ellipsis">\n'
+    r += `     ${review.authorName}\n`
+    r += '   </div>\n'
+    r += '   <div class="njt-review-badge-modal__review-time njt-ellipsis">\n'
+    r += `     ${review.time}\n`
+    r += '   </div>\n'
+
+    r += hydrateRatingStars(review.rating)
+
+    r += hydrateReviewText(review)
+
+    r += ' </div>\n'
+    r += '</div>\n'
+    return r;
+  }
+
+  function hydrateRatingStars(rating) {
+    if (isNaN(rating)) return ''
+    
+    const ratingPercent = parseInt(rating) * 10 * 2
+    
+    return `
+    <div class="njt-fr-starslist-container">
+      <div class="njt-fr-starslist-current" style="width: ${ratingPercent}%">
+        <div class="njt-fr-star"></div>
+        <div class="njt-fr-star"></div>
+        <div class="njt-fr-star"></div>
+        <div class="njt-fr-star"></div>
+        <div class="njt-fr-star"></div>
+        <div class="njt-fr-star"></div>
+      </div>
+      <div class="njt-fr-starslist-background">
+        <div class="njt-fr-star"></div>
+        <div class="njt-fr-star"></div>
+        <div class="njt-fr-star"></div>
+        <div class="njt-fr-star"></div>
+        <div class="njt-fr-star"></div>
+      </div>
+    </div>\n`
+  }
+  
+  function hydrateReviewText(review) {
+    let result = `
+    <br/>
+    <span id="njt-review-text-${review.id}" class="njt-review-badge-modal__review-text">
+      <span class="njt-short-text">${truncateReviewText(review.reviewText)}</span>
+      <span class="njt-full-text">${review.reviewText}</span>
+    </span>
+    `
+
+    if (isLongText(review.reviewText)) {
+      result += `
+        <span 
+          class="njt-btn-read-more-badge-review"
+          data-review_id="${review.id}"
+        > Read more</span>
+        <span 
+          class="njt-btn-read-less-badge-review"
+          data-review_id="${review.id}"
+        > Read less</span>
+      `
+    }
+
+    return result
+  }
+
+  jQuery(document.body).on('click', '.njt-btn-read-more-badge-review', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const reviewId = jQuery(this).data('review_id');
+
+    jQuery(`#njt-review-text-${reviewId}`).find('.njt-short-text').css('display', 'none')
+    jQuery(`#njt-review-text-${reviewId}`).find('.njt-full-text').css('display', 'unset')
+    jQuery(this).css('display', 'none')
+    jQuery(this).next().css('display', 'unset')
+  });
+
+  jQuery(document.body).on('click', '.njt-btn-read-less-badge-review', function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const reviewId = jQuery(this).data('review_id');
+
+    jQuery(`#njt-review-text-${reviewId}`).find('.njt-short-text').css('display', 'unset')
+    jQuery(`#njt-review-text-${reviewId}`).find('.njt-full-text').css('display', 'none')
+    jQuery(this).css('display', 'none')
+    jQuery(this).prev().css('display', 'unset').css('display', 'unset')
+  });
+
+  const SHORT_REVIEW_LENGTH = 50
+  function truncateReviewText(str){
+    return isLongText(str) ? (str.slice(0, SHORT_REVIEW_LENGTH-1) + '&hellip;') : str;
+  };
+
+  function isLongText(text) {
+    return text.length > SHORT_REVIEW_LENGTH
+  }
+
+  jQuery(`${MODAL}__close-btn`).click(function () {
+    jQuery(MODAL).css("display", "none");
+  });
+});

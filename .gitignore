@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*~
+
+# IDE / editor
+.idea/
+.vscode/
+*.sublime-*
+
+# Local / env (if you add any later)
+.env
+.env.local
+*.log
+
+# Optional: uncomment if you don’t want to track workspace file
+# *.code-workspace

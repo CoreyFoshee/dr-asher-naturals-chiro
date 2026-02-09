@@ -1,0 +1,67 @@
+DR. ASHER NATURAL CHIROPRACTIC — STATIC SITE SNAPSHOT
+=====================================================
+
+This folder is a static copy of your website. You can open it in a browser
+or host it on any web server. Here’s what works and what doesn’t.
+
+HOW TO OPEN LOCALLY
+-------------------
+• Double-click “index.html” to open the homepage in your browser.
+• Or drag the whole folder into an open browser window (some browsers accept this).
+• To view from a “real” URL (e.g. http://localhost:8080), use a simple local server:
+  - Mac/Linux: open Terminal, go to this folder, then run:
+    python3 -m http.server 8080
+  - Then visit: http://localhost:8080
+
+WHAT WORKS
+----------
+• All pages, images, and navigation (clicking through the site).
+• “Make An Appointment” and “Book A Consultation” buttons — they go to your
+  existing booking link (ct.ptneng.co) and work as normal.
+• Phone number, email, and address links (tel:, mailto:, Google Maps).
+• Links to Facebook and Instagram.
+• Everything is viewable and works for reading and for getting patients to
+  book or contact you.
+
+WHAT DOES NOT WORK (without extra setup)
+----------------------------------------
+• Contact form — The form on the Contact Us page does not submit anywhere.
+  It’s just static HTML. For now, patients can use the phone number and
+  email shown in the header and footer.
+
+• Search — If there is a search box, it won’t return results; there is no
+  search server in this static copy.
+
+• Any “log in” or “admin” links — These have been removed or neutralized;
+  this copy is for public viewing only.
+
+OPTIONS TO MAKE THINGS “WORK” AGAIN
+-----------------------------------
+If you want the contact form to work or add search:
+
+1) Contact form
+   • Use a form service that posts to their server and emails you, e.g.:
+     - Formspree (formspree.io) — free tier, no server needed.
+     - Netlify Forms (if you host on Netlify).
+     - Or a simple “mailto:” link that opens the user’s email client with
+       your address pre-filled.
+   • Someone with basic HTML experience can replace the current form with
+     one of these options (we can provide exact steps if needed).
+
+2) Search
+   • Add a “Google Custom Search” box that searches your live site, or
+   • Use a client-side search (e.g. a small script that searches this
+     static copy) — requires a bit of setup.
+
+3) Hosting
+   • You can upload this entire folder to any static host (e.g. Netlify,
+     GitHub Pages, or your current host’s “static” or “HTML” area). No
+     WordPress or database is required.
+
+If you have questions about reconnecting the form or adding search, ask your
+web designer or developer — the steps are straightforward once you choose
+a service.
+
+—
+This snapshot was taken from the live site. Content and design reflect the
+site as of the snapshot date.

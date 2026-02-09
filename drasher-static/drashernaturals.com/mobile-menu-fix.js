@@ -3,13 +3,17 @@
   /* Ensure menu is closed on load (body may have material-ocm-open from theme or #sidewidgetarea hash) */
   if (document.body) document.body.classList.remove('material-ocm-open');
   if (typeof history !== 'undefined' && location.hash === '#sidewidgetarea') history.replaceState(null, '', location.pathname + location.search);
+  var panel;
   function openMenu() {
     document.body.classList.add('material-ocm-open');
+    if (panel) { panel.style.backgroundColor = '#1a1a1a'; panel.style.setProperty('z-index', '999999', 'important'); }
   }
   function closeMenu() {
     document.body.classList.remove('material-ocm-open');
+    if (panel) { panel.style.backgroundColor = ''; panel.style.zIndex = ''; }
   }
   function init() {
+    panel = document.getElementById('slide-out-widget-area');
     /* Always start with menu closed (prevents green screen on load if theme added material-ocm-open) */
     document.body.classList.remove('material-ocm-open');
     window.addEventListener('load', function() { document.body.classList.remove('material-ocm-open'); });

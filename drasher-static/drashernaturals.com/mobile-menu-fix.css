@@ -1,81 +1,195 @@
-/* Mobile menu: full-screen overlay, no page push */
+/* Mobile menu: theme panel as full-screen green modal. No slide. Our close on body. Simple click. */
 @media (max-width: 999px) {
-  /* When menu is CLOSED: hide overlay so it doesn't cover the page (fixes green screen) */
-  body:not(.material-ocm-open) #slide-out-widget-area-bg.slide-out-from-right,
-  body:not(.material-ocm-open) #slide-out-widget-area.slide-out-from-right {
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-    z-index: -1 !important;
+  /* When closed: hide theme slide-out */
+  #slide-out-widget-area-bg,
+  #slide-out-widget-area {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
   }
-  /* When menu is OPEN: backdrop covers full viewport (green/dark) */
-  body.material-ocm-open #slide-out-widget-area-bg.slide-out-from-right {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: 100vw !important;
-    z-index: 999998 !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
+
+  /* When open: full-screen green panel, no slide (override theme transforms) */
+  body.material-ocm-open #slide-out-widget-area-bg {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: none;
+    background: #34a853 !important;
+    background-color: #34a853 !important;
   }
-  /* Menu panel on TOP of backdrop: solid background so content is visible (not green) */
-  body.material-ocm-open #slide-out-widget-area.slide-out-from-right {
+  body.material-ocm-open #slide-out-widget-area {
+    visibility: visible;
+    opacity: 1;
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
     width: 100% !important;
-    height: 100vh !important;
-    max-width: 100% !important;
-    z-index: 999999 !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    background: #1a1a1a !important;
-  }
-  body.material-ocm-open #slide-out-widget-area.slide-out-from-right .inner-wrap {
-    width: 100% !important;
     height: 100% !important;
-    opacity: 1 !important;
-    overflow-y: auto !important;
-  }
-  /* Inner content area: ensure visible and right-aligned (slide-from-right) */
-  body.material-ocm-open #slide-out-widget-area.slide-out-from-right .inner {
-    max-width: 320px !important;
-    margin-left: auto !important;
-    margin-right: 0 !important;
-    height: 100% !important;
-    padding: 2rem !important;
-    box-sizing: border-box !important;
-  }
-  /* Ensure menu links and close button are visible (light on dark) */
-  body.material-ocm-open #slide-out-widget-area.slide-out-from-right a,
-  body.material-ocm-open #slide-out-widget-area.slide-out-from-right .slide_out_area_close {
-    color: #fff !important;
-  }
-  /* Don't push or translate the page when menu opens */
-  body.material-ocm-open,
-  body.material-ocm-open #ajax-content-wrap,
-  body.material-ocm-open .ocm-effect-wrap,
-  body.material-ocm-open #header-outer {
     transform: none !important;
-    margin-left: 0 !important;
+    transition: none !important;
+    pointer-events: none;
+    z-index: 999999;
+    background: #34a853 !important;
+    background-color: #34a853 !important;
   }
-  /* Ensure toggle is clickable (stacking / touch) */
+  body.material-ocm-open #slide-out-widget-area .inner-wrap {
+    pointer-events: auto;
+    background: transparent !important;
+  }
+  body.material-ocm-open .ocm-effect-wrap {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Theme's close – hidden; we use our own */
+  body.material-ocm-open .slide_out_area_close {
+    display: none !important;
+  }
+
+  /* Our close button: on body, circle X, top right – whole area is one click target */
+  .mobile-menu-close-btn {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+    margin: 0;
+    padding: 0;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000001;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    font: inherit;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    pointer-events: auto;
+  }
+  /* All children ignore pointer so the button always gets the click */
+  .mobile-menu-close-btn *,
+  .mobile-menu-close-btn *::before,
+  .mobile-menu-close-btn *::after {
+    pointer-events: none !important;
+  }
+  body.material-ocm-open .mobile-menu-close-btn {
+    display: flex;
+  }
+  .mobile-menu-close-btn .screen-reader-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+  .mobile-menu-close-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+  .mobile-menu-close-icon::before,
+  .mobile-menu-close-icon::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 2px;
+    margin: -1px 0 0 -10px;
+    background: currentColor;
+    border-radius: 1px;
+    transform-origin: center center;
+    pointer-events: none;
+  }
+  .mobile-menu-close-icon::before {
+    transform: rotate(45deg);
+  }
+  .mobile-menu-close-icon::after {
+    transform: rotate(-45deg);
+  }
+
+  /* Panel menu content – white text */
+  body.material-ocm-open #slide-out-widget-area .menu a,
+  body.material-ocm-open #slide-out-widget-area .menu-title-text,
+  body.material-ocm-open #slide-out-widget-area .info {
+    color: #fff;
+  }
+  body.material-ocm-open #slide-out-widget-area .nectar-menu-icon-img {
+    filter: brightness(0) invert(1);
+  }
+
+  /* Hamburger: one link, full hit area, icon doesn’t capture clicks */
   .slide-out-widget-area-toggle {
     cursor: pointer;
     position: relative;
     z-index: 10;
+    pointer-events: auto;
   }
   .slide-out-widget-area-toggle a {
-    display: block;
-    padding: 12px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    padding: 12px !important;
     -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box !important;
+    text-decoration: none !important;
+    color: inherit !important;
+    pointer-events: auto !important;
+  }
+  .slide-out-widget-area-toggle .screen-reader-text {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    border: 0 !important;
+  }
+  .mobile-menu-hamburger-icon {
+    display: block !important;
+    width: 24px !important;
+    height: 14px !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    background-clip: content-box !important;
+    padding: 6px 0 !important;
+    background-color: currentColor !important;
+    border-radius: 1px !important;
+    pointer-events: none !important;
+  }
+  .mobile-menu-hamburger-icon::before,
+  .mobile-menu-hamburger-icon::after {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    width: 24px !important;
+    height: 2px !important;
+    background: currentColor !important;
+    border-radius: 1px !important;
+  }
+  .mobile-menu-hamburger-icon::before {
+    top: 0 !important;
+  }
+  .mobile-menu-hamburger-icon::after {
+    bottom: 0 !important;
+  }
+  body.material-ocm-open .slide-out-widget-area-toggle {
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
 }

@@ -4,3 +4,9 @@
   visibility: hidden !important;
   pointer-events: none !important;
 }
+
+/* Testimonials page hidden until content is ready */
+li.menu-item-537,
+li.menu-item-721 {
+  display: none !important;
+}

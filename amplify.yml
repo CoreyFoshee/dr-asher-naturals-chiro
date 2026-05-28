@@ -21,3 +21,12 @@ customRedirects:
   - source: /index.html<p*>
     target: /
     status: '301'
+  - source: /reviews
+    target: /
+    status: '302'
+  - source: /reviews/
+    target: /
+    status: '302'
+  - source: /reviews/<*>
+    target: /
+    status: '302'

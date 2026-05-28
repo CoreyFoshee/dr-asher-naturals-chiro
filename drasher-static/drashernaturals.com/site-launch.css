@@ -101,3 +101,86 @@ li.menu-item-721 {
     display: inline-block !important;
   }
 }
+
+/* Theme off-canvas menu (green #4a993c) sits after the footer in the HTML and
+   creates a large green block on desktop. Custom mobile nav replaces it. */
+#slide-out-widget-area,
+#slide-out-widget-area-bg {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+/* Unused legacy Google review side panel (no badge on site) */
+.njt-review-badge-modal {
+  display: none !important;
+}
+
+/* Homepage: Trustindex widget + footer spacing */
+body.home #footer-outer {
+  margin-bottom: 0 !important;
+}
+
+body.home pre.ti-widget {
+  display: none !important;
+}
+
+body.home .wpb_raw_code.wpb_raw_html .wpb_wrapper {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+body.home .ti-widget {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+body.home .ti-widget trustindex-image {
+  display: inline-block !important;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+body.home .ti-widget .ti-star trustindex-image {
+  width: 17px !important;
+  height: 17px !important;
+  max-width: 17px !important;
+  max-height: 17px !important;
+}
+
+body.home .ti-widget .ti-profile-img trustindex-image {
+  width: 40px !important;
+  height: 40px !important;
+  max-width: 40px !important;
+  max-height: 40px !important;
+  border-radius: 50%;
+}
+
+body.home .ti-widget .ti-large-logo trustindex-image {
+  width: 150px !important;
+  height: 25px !important;
+  max-width: 150px !important;
+  max-height: 25px !important;
+}
+
+body.home .ti-widget .ti-platform-icon trustindex-image {
+  width: 20px !important;
+  height: 20px !important;
+  max-width: 20px !important;
+  max-height: 20px !important;
+}
+
+/* Briefly hide reviews while resizing so giant icons do not flash */
+body.home.ti-is-resizing .ti-widget {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  min-height: 320px;
+}

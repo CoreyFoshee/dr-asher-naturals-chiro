@@ -140,8 +140,72 @@
     color: #fff;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 5.5rem 1.25rem 2rem;
+    padding: 4.75rem 1.25rem 2rem;
     box-sizing: border-box;
+  }
+
+  /* Visible close button — fixed top-right on the green panel */
+  .drasher-mobile-nav__close {
+    position: fixed;
+    top: max(0.85rem, env(safe-area-inset-top, 0px));
+    right: max(0.85rem, env(safe-area-inset-right, 0px));
+    z-index: 1000005;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin: 0;
+    padding: 0;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: rgba(11, 42, 74, 0.35);
+    color: #fff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .drasher-mobile-nav__close .screen-reader-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  .drasher-mobile-nav__close-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    pointer-events: none;
+  }
+
+  .drasher-mobile-nav__close-icon::before,
+  .drasher-mobile-nav__close-icon::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 2px;
+    margin: -1px 0 0 -10px;
+    background: currentColor;
+    border-radius: 1px;
+  }
+
+  .drasher-mobile-nav__close-icon::before {
+    transform: rotate(45deg);
+  }
+
+  .drasher-mobile-nav__close-icon::after {
+    transform: rotate(-45deg);
   }
 
   .drasher-mobile-nav__list {

@@ -77,6 +77,7 @@
 
       e.preventDefault();
       e.stopPropagation();
+      e.stopImmediatePropagation();
 
       var submitBtn = form.querySelector('[type="submit"]');
       if (submitBtn) submitBtn.disabled = true;
@@ -110,6 +111,11 @@
   }
 
   function init() {
+    /* Disable Contact Form 7 if its script was cached/loaded elsewhere */
+    if (typeof window.wpcf7 !== 'undefined' && window.wpcf7.init) {
+      window.wpcf7.init = function() {};
+    }
+
     document.querySelectorAll('#stickyelements-form, form.wpcf7-form, form[data-formspree]').forEach(setupForm);
 
     if (new URLSearchParams(window.location.search).get('sent') === '1') {

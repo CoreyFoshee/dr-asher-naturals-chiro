@@ -1,0 +1,6 @@
+/* Launch: hide non-functional header search */
+#search-outer {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

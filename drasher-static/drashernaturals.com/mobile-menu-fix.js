@@ -191,10 +191,32 @@
     addCloseButton(root);
   }
 
+  function bindPanelClick(panel) {
+    if (panel.dataset.drasherPanelBound === '1') return;
+    panel.dataset.drasherPanelBound = '1';
+
+    panel.addEventListener('click', function (e) {
+      if (!document.body.classList.contains(OPEN_CLASS)) return;
+      /* Keep expand (+) and × working without dismissing first */
+      if (e.target.closest('.drasher-mobile-nav__expand, .drasher-mobile-nav__close')) {
+        return;
+      }
+      /* Links navigate; any other tap on the panel closes the menu */
+      closeMenu();
+    });
+  }
+
+  function ensurePanelBehavior() {
+    if (!root) return;
+    var panel = root.querySelector('.drasher-mobile-nav__panel');
+    if (panel) bindPanelClick(panel);
+  }
+
   function createOverlay() {
     if (document.getElementById(ROOT_ID)) {
       root = document.getElementById(ROOT_ID);
       migrateCloseButton();
+      ensurePanelBehavior();
       return;
     }
 
@@ -217,13 +239,8 @@
     nav.setAttribute('aria-label', 'Mobile navigation');
     nav.appendChild(buildMenuList());
 
-    nav.addEventListener('click', function (e) {
-      if (e.target.closest('a[href]') && !e.target.closest('.drasher-mobile-nav__expand')) {
-        closeMenu();
-      }
-    });
-
     panel.appendChild(nav);
+    bindPanelClick(panel);
     root.appendChild(backdrop);
     root.appendChild(panel);
     addCloseButton(root);

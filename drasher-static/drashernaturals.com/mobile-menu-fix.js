@@ -157,29 +157,44 @@
     return ul;
   }
 
-  function addCloseButton(panel) {
-    if (panel.querySelector('.drasher-mobile-nav__close')) return;
+  function bindCloseButton(btn) {
+    if (btn.dataset.drasherCloseBound === '1') return;
+    btn.dataset.drasherCloseBound = '1';
 
-    var closeBtn = document.createElement('button');
-    closeBtn.type = 'button';
-    closeBtn.className = 'drasher-mobile-nav__close';
-    closeBtn.setAttribute('aria-label', 'Close menu');
-    closeBtn.innerHTML =
-      '<span class="screen-reader-text">Close menu</span>' +
-      '<span class="drasher-mobile-nav__close-icon" aria-hidden="true"></span>';
-    closeBtn.addEventListener('click', function (e) {
+    function onClose(e) {
       e.preventDefault();
       e.stopPropagation();
       closeMenu();
-    });
-    panel.appendChild(closeBtn);
+    }
+    btn.addEventListener('click', onClose, true);
+    btn.addEventListener('touchend', onClose, { capture: true, passive: false });
+  }
+
+  function addCloseButton(container) {
+    var closeBtn = container.querySelector(':scope > .drasher-mobile-nav__close');
+    if (!closeBtn) {
+      closeBtn = document.createElement('button');
+      closeBtn.type = 'button';
+      closeBtn.className = 'drasher-mobile-nav__close';
+      closeBtn.setAttribute('aria-label', 'Close menu');
+      /* Plain × character — no child elements that can steal taps */
+      closeBtn.textContent = '\u00D7';
+      container.appendChild(closeBtn);
+    }
+    bindCloseButton(closeBtn);
+    return closeBtn;
+  }
+
+  function migrateCloseButton() {
+    var misplaced = root.querySelector('.drasher-mobile-nav__panel .drasher-mobile-nav__close');
+    if (misplaced) misplaced.remove();
+    addCloseButton(root);
   }
 
   function createOverlay() {
     if (document.getElementById(ROOT_ID)) {
       root = document.getElementById(ROOT_ID);
-      var existingPanel = root.querySelector('.drasher-mobile-nav__panel');
-      if (existingPanel) addCloseButton(existingPanel);
+      migrateCloseButton();
       return;
     }
 
@@ -195,7 +210,6 @@
 
     var panel = document.createElement('div');
     panel.className = 'drasher-mobile-nav__panel';
-    addCloseButton(panel);
 
     var nav = document.createElement('nav');
     nav.className = 'drasher-mobile-nav__menu';
@@ -212,6 +226,7 @@
     panel.appendChild(nav);
     root.appendChild(backdrop);
     root.appendChild(panel);
+    addCloseButton(root);
     document.body.appendChild(root);
   }
 

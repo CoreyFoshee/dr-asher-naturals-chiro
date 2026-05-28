@@ -14,7 +14,7 @@ The static clone has **no server or database**, so these pieces need to be recon
 |--------|--------|----------|
 | **Formspree** | Low | Quick fix. Create a free Formspree account, get a form endpoint URL, then change the Contact form’s `<form action="...">` to that URL. Formspree emails you submissions. [formspree.io](https://formspree.io) |
 | **Netlify Forms** | Low | If you host this folder on Netlify: add `netlify` or `data-netlify="true"` to the form and a hidden input; Netlify will capture submissions and show them in the Netlify dashboard. |
-| **mailto: link** | Easiest | Replace the form with a button or link: `<a href="mailto:info@drashernatural.com?subject=Contact%20from%20website">Email us</a>`. Opens the user’s email client. No server, but less polished. |
+| **mailto: link** | Easiest | Replace the form with a button or link: `<a href="mailto:info@doctorasher.com?subject=Contact%20from%20website">Email us</a>`. Opens the user’s email client. No server, but less polished. |
 | **Your host’s form handler** | Varies | Many hosts (cPanel, etc.) have “FormMail” or a similar script. Point the form `action` to that script and set the recipient email. |
 
 **Concrete Formspree steps:**  

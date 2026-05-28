@@ -28,4 +28,50 @@ li.menu-item-721 {
     background-size: cover !important;
     background-position: center center !important;
   }
+
+  /* Fluid hero typography (overrides theme mobile shrink + hidden subtitle) */
+  body.home #necter-sliderrr .swiper-slide .content {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    box-sizing: border-box;
+  }
+
+  body.home #necter-sliderrr .swiper-slide .content h2,
+  body.home #necter-sliderrr .swiper-slide .content h2.ns-heading-el {
+    font-size: clamp(1.75rem, 5vw + 0.65rem, 2.65rem) !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  body.home #necter-sliderrr .swiper-slide .content p,
+  body.home #necter-sliderrr .swiper-slide .content p span {
+    display: block !important;
+    font-size: clamp(0.9375rem, 2.5vw + 0.4rem, 1.125rem) !important;
+    line-height: 1.45 !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  body.home #necter-sliderrr .swiper-slide .content .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    padding-top: 0.75rem !important;
+  }
+
+  body.home #necter-sliderrr .swiper-slide .content .buttons .button a,
+  body.home #necter-sliderrr a.primary-color {
+    font-size: clamp(0.8125rem, 2vw + 0.35rem, 0.9375rem) !important;
+    width: auto !important;
+    min-width: 8.5rem;
+    padding: 0.75rem 1rem !important;
+    line-height: 1.3 !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body.home #necter-sliderrr .swiper-slide .content p br {
+    display: none;
+  }
 }

@@ -10,3 +10,22 @@ li.menu-item-537,
 li.menu-item-721 {
   display: none !important;
 }
+
+/* Homepage hero slider: taller on mobile/tablet */
+@media screen and (max-width: 999px) {
+  body.home #necter-sliderrr .nectar-slider-wrap,
+  body.home #necter-sliderrr .nectar-slider-wrap .swiper-container,
+  body.home #necter-sliderrr .nectar-slider-wrap .swiper-wrapper,
+  body.home #necter-sliderrr .nectar-slider-wrap .swiper-slide,
+  body.home #necter-sliderrr .nectar-slider-wrap .slide-bg-wrap {
+    min-height: 65vh !important;
+    height: 65vh !important;
+  }
+
+  body.home #necter-sliderrr .nectar-slider-wrap .slide-bg-wrap .image-bg {
+    min-height: 100% !important;
+    height: 100% !important;
+    background-size: cover !important;
+    background-position: center center !important;
+  }
+}

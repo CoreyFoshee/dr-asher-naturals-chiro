@@ -1,35 +1,22 @@
-# Formspree setup (one-time, ~2 minutes)
+# Formspree – configured
 
-The site is wired for Formspree. You only need to paste your form ID.
+**Endpoint:** `https://formspree.io/f/xzdwogej`  
+**Notifications:** info@doctorasher.com (set in Formspree dashboard)
 
-## Steps
+## Integration used
 
-1. Go to [https://formspree.io](https://formspree.io) and sign up (free tier is fine).
-2. Click **+ New Form** and name it (e.g. `Doctor Asher Contact`).
-3. Set notifications to **info@doctorasher.com**.
-4. Open the form → **Integration** (or **Endpoint**) and copy the URL, e.g.  
-   `https://formspree.io/f/abcxyzqw`
-5. Edit this file in the repo:
+Static HTML site on Amplify → **Vanilla JS (Ajax)** via `formspree-forms.js` (fetch + `Accept: application/json`), with **Basic HTML** fallback (`action` + `method="POST"` on each form).
 
-   `drasher-static/drashernaturals.com/formspree-config.js`
+Forms connected:
+- `/contact-us/` – main contact form
+- Floating **Contact Us** sidebar – all pages
 
-   Replace `REPLACE_WITH_YOUR_FORM_ID` with your ID only (the part after `/f/`):
+## Config file
 
-   ```javascript
-   window.FORMSPREE_ENDPOINT = 'https://formspree.io/f/abcxyzqw';
-   ```
+`drasher-static/drashernaturals.com/formspree-config.js`
 
-6. Commit and push (or redeploy on Amplify).
-7. Formspree may email you once to **confirm** the form—click that link.
-8. Test:
-   - [https://doctorasher.com/contact-us/](https://doctorasher.com/contact-us/)
-   - Floating **Contact Us** tab on the left
+## Test
 
-Until step 5 is done, submit buttons open a `mailto:info@doctorasher.com` link instead.
-
-## What was connected
-
-- **Contact Us** page form (Contact Form 7 markup, now posts to Formspree)
-- **Floating sidebar** contact form on every page
-
-Both use the same endpoint from `formspree-config.js`.
+1. Confirm the form in Formspree (check email if first submission).
+2. Submit on [doctorasher.com/contact-us/](https://doctorasher.com/contact-us/)
+3. Check Formspree dashboard → Submissions.

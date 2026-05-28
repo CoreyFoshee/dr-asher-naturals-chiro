@@ -48,9 +48,12 @@
 
   function setupForm(form) {
     if (form.getAttribute('data-formspree-ready') === 'true') return;
+    var url = endpoint();
     form.setAttribute('data-formspree-ready', 'true');
     form.setAttribute('method', 'POST');
-    form.setAttribute('action', '#');
+    /* Basic HTML fallback: posts to Formspree if JS is disabled */
+    if (url) form.setAttribute('action', url);
+    else form.setAttribute('action', '#');
 
     var label = form.getAttribute('data-formspree') || 'website';
     ensureHidden(form, '_subject', 'Dr. Asher website – ' + label);

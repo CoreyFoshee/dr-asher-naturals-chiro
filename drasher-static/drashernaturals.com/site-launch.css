@@ -75,3 +75,29 @@ li.menu-item-721 {
     display: none;
   }
 }
+
+/* Mobile header logo — ~48px tall (common 44–52px range for professional sites) */
+@media screen and (max-width: 1030px) {
+  #header-outer #logo {
+    display: inline-flex !important;
+    align-items: center;
+    max-width: calc(100vw - 6.5rem);
+  }
+
+  #header-outer #logo img {
+    height: clamp(44px, 11vw, 52px) !important;
+    width: auto !important;
+    max-height: 52px !important;
+    max-width: min(180px, 58vw) !important;
+    object-fit: contain;
+  }
+
+  /* Theme ships a tiny 30px mobile logo — show one crisp wordmark */
+  #header-outer #logo img.stnd.default-logo {
+    display: none !important;
+  }
+
+  #header-outer #logo img.mobile-only-logo {
+    display: inline-block !important;
+  }
+}

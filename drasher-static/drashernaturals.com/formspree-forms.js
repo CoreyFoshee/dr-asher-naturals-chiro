@@ -23,27 +23,47 @@
     el.value = value;
   }
 
-  function showSuccess(form) {
-    var msg = form.querySelector('.wpcf7-response-output, .mse-form-success-message, [data-formspree-success]');
-    if (msg) {
-      msg.textContent = 'Thank you! Your message has been sent.';
-      msg.style.display = 'block';
-      msg.removeAttribute('aria-hidden');
-      msg.classList.add('formspree-success-visible');
-    } else {
-      alert('Thank you! Your message has been sent.');
+  function messageEl(form, createIfMissing) {
+    var msg = form.querySelector('.wpcf7-response-output, .mse-form-success-message, .formspree-success-banner, [data-formspree-success]');
+    if (!msg && createIfMissing) {
+      msg = document.createElement('div');
+      msg.className = 'formspree-success-banner';
+      msg.setAttribute('role', 'status');
+      msg.setAttribute('aria-live', 'polite');
+      form.appendChild(msg);
     }
+    return msg;
+  }
+
+  function showSuccess(form) {
+    form.classList.remove('init', 'submitting', 'failed', 'invalid', 'spam');
+    form.classList.add('sent');
+    form.setAttribute('data-status', 'sent');
+
+    var msg = messageEl(form, true);
+    msg.textContent = 'Thank you! Your message has been sent. We will get back to you soon.';
+    msg.style.display = 'block';
+    msg.style.visibility = 'visible';
+    msg.removeAttribute('aria-hidden');
+    msg.classList.remove('formspree-error-visible');
+    msg.classList.add('formspree-success-visible');
+
+    try {
+      msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (err) { /* ignore */ }
   }
 
   function showError(form) {
-    var msg = form.querySelector('.wpcf7-response-output, .mse-form-success-message');
-    if (msg) {
-      msg.textContent = 'Sorry, something went wrong. Please email ' + FALLBACK_EMAIL + ' directly.';
-      msg.style.display = 'block';
-      msg.removeAttribute('aria-hidden');
-    } else {
-      alert('Sorry, something went wrong. Please email ' + FALLBACK_EMAIL + ' directly.');
-    }
+    form.classList.remove('sent');
+    form.classList.add('failed');
+
+    var msg = messageEl(form, true);
+    msg.textContent = 'Sorry, something went wrong. Please email ' + FALLBACK_EMAIL + ' directly.';
+    msg.style.display = 'block';
+    msg.style.visibility = 'visible';
+    msg.removeAttribute('aria-hidden');
+    msg.classList.remove('formspree-success-visible');
+    msg.classList.add('formspree-error-visible');
   }
 
   function setupForm(form) {

@@ -1,0 +1,28 @@
+/* Formspree success/error – overrides Contact Form 7 .init { display: none } */
+.wpcf7 form .wpcf7-response-output.formspree-success-visible,
+.wpcf7 form.init .wpcf7-response-output.formspree-success-visible,
+.wpcf7 form.sent .wpcf7-response-output.formspree-success-visible,
+.mse-form-success-message.formspree-success-visible,
+.formspree-success-banner {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin: 1.25rem 0 !important;
+  padding: 1rem 1.25rem !important;
+  border: 2px solid #34a853 !important;
+  background: #f0faf0 !important;
+  color: #1a5c2e !important;
+  border-radius: 6px !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  font-weight: 500 !important;
+}
+
+.wpcf7 form .wpcf7-response-output.formspree-error-visible,
+.mse-form-success-message.formspree-error-visible {
+  display: block !important;
+  visibility: visible !important;
+  border-color: #c62828 !important;
+  background: #ffebee !important;
+  color: #b71c1c !important;
+}

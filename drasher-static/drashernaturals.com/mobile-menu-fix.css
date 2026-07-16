@@ -1,5 +1,20 @@
 /* Custom mobile navigation — replaces Salient off-canvas panel on small screens */
 
+/* JS always injects #drasher-mobile-nav into <body>. Without a base hide rule,
+   it renders as an unstyled link list below the footer on desktop. */
+#drasher-mobile-nav {
+  display: none !important;
+}
+
+/* Theme slide-out is replaced by the custom overlay — never show it in-flow */
+#slide-out-widget-area,
+#slide-out-widget-area-bg,
+.mobile-menu-close-btn {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 @media (max-width: 1030px) {
   /* Disable theme slide-out (causes broken clicks / close) */
   #slide-out-widget-area,
@@ -10,6 +25,11 @@
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
+  }
+
+  /* Re-enable custom overlay shell on mobile (still hidden until opened) */
+  #drasher-mobile-nav {
+    display: block !important;
   }
 
   body.drasher-mobile-nav-open .ocm-effect-wrap {

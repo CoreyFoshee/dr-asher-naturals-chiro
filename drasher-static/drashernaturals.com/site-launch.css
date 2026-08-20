@@ -1,4 +1,21 @@
-/* Launch: hide non-functional header search */
+/* Schedule Appointment nav button (top of main menu) */
+header#top li#menu-item-schedule.menu-item-schedule-nav span.menu-title-text {
+  background: #0B2A4A;
+  color: #ffffff;
+  padding: 24px 20px;
+  display: inline-block;
+}
+
+header#top li#menu-item-schedule.menu-item-schedule-nav span.menu-title-text:after {
+  display: none;
+}
+
+/* Legacy right-side CTA duplicates the new top nav item */
+header#top li#menu-item-42,
+.off-canvas-menu-container li.menu-item-42 {
+  display: none !important;
+}
+
 #search-outer {
   display: none !important;
   visibility: hidden !important;

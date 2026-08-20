@@ -23,6 +23,51 @@
     el.value = value;
   }
 
+  function phoneField(form) {
+    return form.querySelector('[type="tel"], [name="contact-form-phone"], [name="your-phone"], [name="phone"]');
+  }
+
+  function ensureSmsCompliance(form) {
+    if (!phoneField(form) || form.querySelector('.formspree-sms-compliance')) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'formspree-sms-compliance';
+    wrap.innerHTML =
+      '<label class="formspree-sms-optin">' +
+      '<input type="checkbox" name="sms-opt-in" value="yes" /> ' +
+      'Yes, I agree to receive SMS appointment reminders, updates, and informative messages from Dr. Asher Natural Chiropractic at the phone number provided.' +
+      '</label>' +
+      '<p class="formspree-sms-disclosure">' +
+      'Message frequency varies. Message and data rates may apply. Reply <strong>STOP</strong> to unsubscribe or <strong>HELP</strong> for help. ' +
+      'Consent is not a condition of purchase. See our ' +
+      '<a href="/privacy-policy/">Privacy Policy</a> and <a href="/terms-conditions/">Terms &amp; Conditions</a>. ' +
+      'Mobile opt-in data will not be shared, sold, or rented.' +
+      '</p>';
+
+    var submitBtn = form.querySelector('[type="submit"]');
+    if (submitBtn && submitBtn.parentNode) {
+      submitBtn.parentNode.insertBefore(wrap, submitBtn);
+    } else {
+      form.appendChild(wrap);
+    }
+  }
+
+  function smsComplianceOk(form) {
+    var phone = phoneField(form);
+    if (!phone || !phone.value.trim()) return true;
+
+    var optIn = form.querySelector('input[name="sms-opt-in"]');
+    if (!optIn || optIn.checked) return true;
+
+    var msg = messageEl(form, true);
+    msg.textContent = 'Please check the SMS opt-in box to continue, or leave the phone field blank if you do not wish to receive text messages.';
+    msg.style.display = 'block';
+    msg.style.visibility = 'visible';
+    msg.classList.remove('formspree-success-visible');
+    msg.classList.add('formspree-error-visible');
+    return false;
+  }
+
   function messageEl(form, createIfMissing) {
     var msg = form.querySelector('.wpcf7-response-output, .mse-form-success-message, .formspree-success-banner, [data-formspree-success]');
     if (!msg && createIfMissing) {
@@ -87,11 +132,20 @@
       });
     }
 
+    ensureSmsCompliance(form);
+
     form.addEventListener('submit', function(e) {
       var url = endpoint();
       if (!url) {
         e.preventDefault();
         window.location.href = 'mailto:' + FALLBACK_EMAIL + '?subject=Contact%20from%20doctorasher.com';
+        return;
+      }
+
+      if (!smsComplianceOk(form)) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         return;
       }
 

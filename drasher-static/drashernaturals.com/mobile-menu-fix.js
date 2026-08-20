@@ -8,7 +8,7 @@
   var OPEN_CLASS = 'drasher-mobile-nav-open';
   var ROOT_ID = 'drasher-mobile-nav';
   var MQ = window.matchMedia('(max-width: 1030px)');
-  var HIDDEN_ITEMS = ['menu-item-537']; /* Testimonials */
+  var HIDDEN_ITEMS = ['menu-item-537', 'menu-item-42']; /* Testimonials, duplicate Schedule CTA */
 
   var root;
   var toggles = [];

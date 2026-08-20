@@ -30,3 +30,9 @@ customRedirects:
   - source: /reviews/<*>
     target: /
     status: '302'
+  - source: /make-an-appointment
+    target: /schedule-appointment/
+    status: '301'
+  - source: /make-an-appointment/
+    target: /schedule-appointment/
+    status: '301'

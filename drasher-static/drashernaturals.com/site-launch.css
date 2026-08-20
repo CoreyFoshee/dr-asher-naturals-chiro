@@ -1,3 +1,20 @@
+/* Meet Our Team: stack all bios vertically (no carousel) */
+.team-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  padding-bottom: 3rem;
+}
+
+.team-stack .team-member #outteam-inr1 {
+  margin: 0;
+}
+
+body.page-id-252 #outteam-main .owl-nav,
+body.page-id-252 #outteam-main .owl-dots {
+  display: none !important;
+}
+
 /* Hide extra Schedule Appointment item on the left of the desktop menu.
    The original right-side CTA (menu-item-42) stays in the theme position. */
 @media screen and (min-width: 1031px) {

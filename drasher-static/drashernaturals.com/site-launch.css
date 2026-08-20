@@ -1,19 +1,9 @@
-/* Schedule Appointment nav button (top of main menu) */
-header#top li#menu-item-schedule.menu-item-schedule-nav span.menu-title-text {
-  background: #0B2A4A;
-  color: #ffffff;
-  padding: 24px 20px;
-  display: inline-block;
-}
-
-header#top li#menu-item-schedule.menu-item-schedule-nav span.menu-title-text:after {
-  display: none;
-}
-
-/* Legacy right-side CTA duplicates the new top nav item */
-header#top li#menu-item-42,
-.off-canvas-menu-container li.menu-item-42 {
-  display: none !important;
+/* Hide extra Schedule Appointment item on the left of the desktop menu.
+   The original right-side CTA (menu-item-42) stays in the theme position. */
+@media screen and (min-width: 1031px) {
+  header#top li#menu-item-schedule.menu-item-schedule-nav {
+    display: none !important;
+  }
 }
 
 #search-outer {

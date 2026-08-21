@@ -9,7 +9,7 @@ frontend:
         - mkdir -p .amplify-hosting/static .amplify-hosting/compute/default
         - cp -R drasher-static/drashernaturals.com/. .amplify-hosting/static/
         - cp api/server.mjs api/load-env.mjs api/email.mjs .amplify-hosting/compute/default/
-        - printf '%s\n' '{ "type": "module" }' > .amplify-hosting/compute/default/package.json
+        - cp api/compute-package.json .amplify-hosting/compute/default/package.json
         - |
           python3 - <<'PY'
           import os

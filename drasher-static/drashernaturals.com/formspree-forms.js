@@ -1,6 +1,6 @@
 /* Submit contact forms via Formspree (static site – no WordPress backend). */
 (function() {
-  var FALLBACK_EMAIL = 'info@doctorasher.com';
+  var FALLBACK_EMAIL = 'drasherdc@yahoo.com';
 
   function endpoint() {
     var url = window.FORMSPREE_ENDPOINT;

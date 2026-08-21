@@ -83,21 +83,6 @@ export function clinicEmailHtml(data) {
   });
 }
 
-export function visitorEmailHtml(data) {
-  return layout({
-    eyebrow: 'Message received',
-    heading: 'Thank you — we received your message',
-    intro: 'Here is a copy of what you sent to Dr. Asher Natural Chiropractic. We will get back to you soon.',
-    rowsHtml:
-      row('Name', data.name) +
-      row('Email', data.email) +
-      row('Phone', data.phone) +
-      row('Subject', data.subject) +
-      row('Message', data.message),
-    footer: 'If you did not submit this form, you can ignore this email.',
-  });
-}
-
 export function clinicEmailPlain(data) {
   return [
     'New website message',

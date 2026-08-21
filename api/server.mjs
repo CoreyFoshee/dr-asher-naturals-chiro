@@ -7,8 +7,6 @@ import {
   clinicEmailPlain,
   clinicRecipients,
   sendMaileroo,
-  visitorEmailHtml,
-  visitorEmailPlain,
 } from './email.mjs';
 
 loadEnv();
@@ -201,18 +199,6 @@ async function handleContact(req, res, origin) {
     html: clinicEmailHtml(data),
     plain: clinicEmailPlain(data),
   });
-
-  try {
-    await sendMaileroo({
-      to: [{ address: data.email, display_name: data.name }],
-      replyTo: { address: 'drasherdc@yahoo.com', display_name: 'Dr. Asher Natural Chiropractic' },
-      subject: 'We received your message — Dr. Asher Natural Chiropractic',
-      html: visitorEmailHtml(data),
-      plain: visitorEmailPlain(data),
-    });
-  } catch (err) {
-    console.error('Visitor confirmation email failed:', err);
-  }
 
   json(res, 200, { ok: true }, headers);
 }

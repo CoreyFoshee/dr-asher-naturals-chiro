@@ -1,0 +1,12 @@
+{
+  "name": "dr-asher-naturals",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node api/server.mjs",
+    "dev": "node api/server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

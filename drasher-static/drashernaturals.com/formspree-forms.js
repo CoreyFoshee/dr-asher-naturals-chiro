@@ -1,15 +1,25 @@
-/* Submit contact forms via Formspree (static site – no WordPress backend). */
+/* Submit contact forms via the Maileroo contact API. */
 (function() {
   var FALLBACK_EMAIL = 'drasherdc@yahoo.com';
 
   function endpoint() {
-    var url = window.FORMSPREE_ENDPOINT;
-    if (!url || url.indexOf('REPLACE_WITH_YOUR_FORM_ID') !== -1) return null;
-    return url;
+    return window.CONTACT_API_URL || '/api/contact';
   }
 
-  function replyToField(form) {
-    return form.querySelector('[name="your-email"], [name="contact-form-email"]');
+  function field(form, selectors) {
+    for (var i = 0; i < selectors.length; i++) {
+      var el = form.querySelector(selectors[i]);
+      if (el) return el;
+    }
+    return null;
+  }
+
+  function val(el) {
+    return el && el.value ? el.value.trim() : '';
+  }
+
+  function phoneField(form) {
+    return field(form, ['[type="tel"]', '[name="contact-form-phone"]', '[name="your-phone"]', '[name="phone"]']);
   }
 
   function ensureHidden(form, name, value) {
@@ -21,10 +31,6 @@
       form.appendChild(el);
     }
     el.value = value;
-  }
-
-  function phoneField(form) {
-    return form.querySelector('[type="tel"], [name="contact-form-phone"], [name="your-phone"], [name="phone"]');
   }
 
   function ensureSmsCompliance(form) {
@@ -52,6 +58,30 @@
     }
   }
 
+  function ensureHoneypot(form) {
+    if (form.querySelector('[name="company_website"]')) return;
+    var hp = document.createElement('input');
+    hp.type = 'text';
+    hp.name = 'company_website';
+    hp.tabIndex = -1;
+    hp.autocomplete = 'off';
+    hp.setAttribute('aria-hidden', 'true');
+    hp.style.cssText = 'position:absolute;left:-9999px;height:0;width:0;opacity:0;';
+    form.appendChild(hp);
+  }
+
+  function messageEl(form, createIfMissing) {
+    var msg = form.querySelector('.wpcf7-response-output, .mse-form-success-message, .formspree-success-banner, [data-formspree-success]');
+    if (!msg && createIfMissing) {
+      msg = document.createElement('div');
+      msg.className = 'formspree-success-banner';
+      msg.setAttribute('role', 'status');
+      msg.setAttribute('aria-live', 'polite');
+      form.appendChild(msg);
+    }
+    return msg;
+  }
+
   function smsComplianceOk(form) {
     var phone = phoneField(form);
     if (!phone || !phone.value.trim()) return true;
@@ -66,18 +96,6 @@
     msg.classList.remove('formspree-success-visible');
     msg.classList.add('formspree-error-visible');
     return false;
-  }
-
-  function messageEl(form, createIfMissing) {
-    var msg = form.querySelector('.wpcf7-response-output, .mse-form-success-message, .formspree-success-banner, [data-formspree-success]');
-    if (!msg && createIfMissing) {
-      msg = document.createElement('div');
-      msg.className = 'formspree-success-banner';
-      msg.setAttribute('role', 'status');
-      msg.setAttribute('aria-live', 'polite');
-      form.appendChild(msg);
-    }
-    return msg;
   }
 
   function showSuccess(form) {
@@ -98,12 +116,12 @@
     } catch (err) { /* ignore */ }
   }
 
-  function showError(form) {
+  function showError(form, text) {
     form.classList.remove('sent');
     form.classList.add('failed');
 
     var msg = messageEl(form, true);
-    msg.textContent = 'Sorry, something went wrong. Please email ' + FALLBACK_EMAIL + ' directly.';
+    msg.textContent = text || ('Sorry, something went wrong. Please email ' + FALLBACK_EMAIL + ' directly.');
     msg.style.display = 'block';
     msg.style.visibility = 'visible';
     msg.removeAttribute('aria-hidden');
@@ -111,37 +129,30 @@
     msg.classList.add('formspree-error-visible');
   }
 
+  function payloadFromForm(form) {
+    return {
+      name: val(field(form, ['[name="your-name"]', '[name="contact-form-name"]', '[name="name"]'])),
+      email: val(field(form, ['[name="your-email"]', '[name="contact-form-email"]', '[name="email"]', '[type="email"]'])),
+      phone: val(phoneField(form)),
+      subject: val(field(form, ['[name="your-subject"]', '[name="subject"]'])),
+      message: val(field(form, ['[name="your-message"]', '[name="contact-form-message"]', '[name="message"]', 'textarea'])),
+      smsOptIn: !!(form.querySelector('input[name="sms-opt-in"]') && form.querySelector('input[name="sms-opt-in"]').checked),
+      source: form.getAttribute('data-formspree') || 'website',
+      page: window.location.href,
+      company_website: val(form.querySelector('[name="company_website"]'))
+    };
+  }
+
   function setupForm(form) {
     if (form.getAttribute('data-formspree-ready') === 'true') return;
-    var url = endpoint();
     form.setAttribute('data-formspree-ready', 'true');
     form.setAttribute('method', 'POST');
-    /* Basic HTML fallback: posts to Formspree if JS is disabled */
-    if (url) form.setAttribute('action', url);
-    else form.setAttribute('action', '#');
-
-    var label = form.getAttribute('data-formspree') || 'website';
-    ensureHidden(form, '_subject', 'Dr. Asher website – ' + label);
-
-    var reply = replyToField(form);
-    if (reply && !form.querySelector('input[name="_replyto"]')) {
-      ensureHidden(form, '_replyto', '');
-      form.addEventListener('input', function() {
-        var r = replyToField(form);
-        if (r) form.querySelector('input[name="_replyto"]').value = r.value;
-      });
-    }
+    form.setAttribute('action', endpoint());
 
     ensureSmsCompliance(form);
+    ensureHoneypot(form);
 
     form.addEventListener('submit', function(e) {
-      var url = endpoint();
-      if (!url) {
-        e.preventDefault();
-        window.location.href = 'mailto:' + FALLBACK_EMAIL + '?subject=Contact%20from%20doctorasher.com';
-        return;
-      }
-
       if (!smsComplianceOk(form)) {
         e.preventDefault();
         e.stopPropagation();
@@ -156,27 +167,28 @@
       var submitBtn = form.querySelector('[type="submit"]');
       if (submitBtn) submitBtn.disabled = true;
 
-      var formData = new FormData(form);
-      var replyInput = replyToField(form);
-      if (replyInput && replyInput.value) {
-        formData.set('_replyto', replyInput.value);
-      }
-
-      fetch(url, {
+      fetch(endpoint(), {
         method: 'POST',
-        body: formData,
-        headers: { Accept: 'application/json' }
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payloadFromForm(form))
       })
         .then(function(res) {
-          if (res.ok) {
-            showSuccess(form);
-            form.reset();
-          } else {
-            throw new Error('Formspree error');
-          }
+          return res.json().then(function(body) {
+            if (res.ok && body && body.ok) {
+              showSuccess(form);
+              form.reset();
+              ensureSmsCompliance(form);
+              ensureHoneypot(form);
+            } else {
+              throw new Error((body && body.message) || 'Send failed');
+            }
+          });
         })
-        .catch(function() {
-          showError(form);
+        .catch(function(err) {
+          showError(form, err && err.message);
         })
         .finally(function() {
           if (submitBtn) submitBtn.disabled = false;
@@ -185,7 +197,6 @@
   }
 
   function init() {
-    /* Disable Contact Form 7 if its script was cached/loaded elsewhere */
     if (typeof window.wpcf7 !== 'undefined' && window.wpcf7.init) {
       window.wpcf7.init = function() {};
     }

@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "routes": [
+    {
+      "path": "/api/contact",
+      "target": {
+        "kind": "Compute",
+        "src": "default"
+      }
+    },
+    {
+      "path": "/api/contact/",
+      "target": {
+        "kind": "Compute",
+        "src": "default"
+      }
+    },
+    {
+      "path": "/*",
+      "target": {
+        "kind": "Static"
+      }
+    }
+  ],
+  "computeResources": [
+    {
+      "name": "default",
+      "runtime": "nodejs20.x",
+      "entrypoint": "server.mjs"
+    }
+  ],
+  "framework": {
+    "name": "express",
+    "version": "4.18.2"
+  }
+}

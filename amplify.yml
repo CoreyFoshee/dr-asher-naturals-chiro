@@ -10,6 +10,27 @@ frontend:
         - cp -R drasher-static/drashernaturals.com/. .amplify-hosting/static/
         - cp api/server.mjs api/load-env.mjs api/email.mjs .amplify-hosting/compute/default/
         - printf '%s\n' '{ "type": "module" }' > .amplify-hosting/compute/default/package.json
+        - |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          dest = Path(".amplify-hosting/compute/default/.env")
+          keys = [
+              "MAILEROO_API_KEY",
+              "MAILEROO_FROM_EMAIL",
+              "MAILEROO_FROM_NAME",
+              "MAILEROO_TO_EMAILS",
+              "MAILEROO_API_URL",
+              "CONTACT_ALLOWED_ORIGINS",
+          ]
+          lines = []
+          for key in keys:
+              value = os.environ.get(key, "")
+              if value:
+                  lines.append(f"{key}={value}")
+          dest.write_text("\n".join(lines) + "\n")
+          print("Wrote compute env with", len(lines), "keys")
+          PY
         - cp api/deploy-manifest.json .amplify-hosting/deploy-manifest.json
   artifacts:
     baseDirectory: .amplify-hosting
